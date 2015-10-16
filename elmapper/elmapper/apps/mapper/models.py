@@ -75,9 +75,10 @@ class FieldMappingConfig(models.Model):
 class MappingConfig(models.Model):
     """Base class for obj mapping"""
     original_fk = models.CharField(max_length=250)
+    internal = None  # map to this object
 
     def __str__(self):
-        return "{} => {}".format(self.original_field_name, self.internal_fk)
+        return "{} => {}".format(self.original_fk, self.internal)
 
     __unicode__ = __str__
 
@@ -87,14 +88,14 @@ class MappingConfig(models.Model):
 
 class CategoryConfig(MappingConfig):
     """A mapping between an external and an internal category foreign keys"""
-    internal_fk = models.ForeignKey(Category)
+    internal = models.ForeignKey(Category)
 
 
 class ColorConfig(MappingConfig):
     """A mapping between an external and an internal color foreign keys"""
-    internal_fk = models.ForeignKey(Color)
+    internal = models.ForeignKey(Color)
 
 
 class BrandConfig(MappingConfig):
     """A mapping between an external and an internal brand foreign keys"""
-    internal_fk = models.ForeignKey(Brand)
+    internal = models.ForeignKey(Brand)

@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('original_fk', models.CharField(max_length=250)),
-                ('internal_fk', models.ForeignKey(to='mapper.Brand')),
+                ('internal', models.ForeignKey(to='mapper.Brand')),
             ],
             options={
                 'abstract': False,
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('original_fk', models.CharField(max_length=250)),
-                ('internal_fk', models.ForeignKey(to='mapper.Category')),
+                ('internal', models.ForeignKey(to='mapper.Category')),
             ],
             options={
                 'abstract': False,
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('original_fk', models.CharField(max_length=250)),
-                ('internal_fk', models.ForeignKey(to='mapper.Color')),
+                ('internal', models.ForeignKey(to='mapper.Color')),
             ],
             options={
                 'abstract': False,
