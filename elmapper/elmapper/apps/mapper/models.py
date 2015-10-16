@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-
+import csv
+
 from django.db import models
+
+PRODUCT_FIELDS = [
+    ('name', 'name'),
+    ('description', 'description'),
+    ('price', 'price'),
+    ('brand', 'brand'),
+    ('category', 'category'),
+    ('color', 'color'),
+]
 
 
 class Brand(models.Model):
@@ -63,7 +74,7 @@ class FieldMappingConfig(models.Model):
     original_field_name = models.CharField(max_length=250)
     product_field = models.CharField(
         max_length=250,
-        choices=tuple([(field.name, field.name) for field in Product._meta.fields]),
+        choices=PRODUCT_FIELDS,
     )
 
     def __str__(self):

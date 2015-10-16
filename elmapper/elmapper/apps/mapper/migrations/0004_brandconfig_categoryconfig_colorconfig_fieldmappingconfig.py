@@ -49,8 +49,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('original_field_name', models.CharField(max_length=250)),
-                ('product_field', models.CharField(max_length=250, choices=[('id', 'id'), (b'name', b'name'), (b'description', b'description'), (b'price', b'price'), (b'brand', b'brand'), (b'category', b'category'), (b'color', b'color')])),
-                ('color', models.ForeignKey(to='mapper.Color')),
+                ('product_field', models.CharField(max_length=250, choices=[(b'name', b'name'), (b'description', b'description'), (b'price', b'price'), (b'brand', b'brand'), (b'category', b'category'), (b'color', b'color')])),
             ],
         ),
     ]
