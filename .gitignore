@@ -67,3 +67,6 @@ Session.vim
 .netrwhist
 *~
 
+####=== SQLite ===#####
+*.sqlite
+*.sqlite3
