@@ -3,12 +3,12 @@ from django.db import models
 
 class Brand(models.Model):
     name = models.CharField(max_length=250)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
 
 class Category(models.Model):
     label = models.CharField(max_length=250)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
 
 class Color(models.Model):
