@@ -13,7 +13,7 @@ setup(
         'Framework :: Django :: 1.8',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 2 :: Only',
-    ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    ],  # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     keywords='mapper django',
     author=u'Romain Commandé',
     author_email='commande.romain@gmail.com',
@@ -24,11 +24,12 @@ setup(
     zip_safe=False,
     install_requires=[
         'Django==1.8.5',
+        'colander==1.0',
     ],
     extras_require={
         'develop': [
-            'ipython',
             'ipdb',
+            'ipython',
         ]
     },
     entry_points=""" # -*- Entry points: -*- """,
