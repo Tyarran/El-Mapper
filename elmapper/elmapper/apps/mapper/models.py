@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+import json
 import logging
 
 from django.db import models
 from django.db.models.fields.related import ForeignKey
+
+from elmapper.apps.mapper.schemas import Fields
 
 
 logger = logging.getLogger(__name__)
@@ -82,6 +85,13 @@ class MappingConfig(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        schema = Fields()
+        deserialized_data = schema.deserialize(schema.serialize(json.loads(self.json)))
+        self.json = json.dumps(deserialized_data, indent=4)
+        super(MappingConfig, self).save(*args, **kwargs)
+
 
     __unicode__ = __str__
 
