@@ -35,16 +35,14 @@ Run application
 
     python manage.py runserver
 
-Go to http://localhost:8000/
-
 Usage
 -----
 
 * The database must be filled with the DJango Administration site: http://localhost:8000.
-* Add brands, colors and categories objects
-* Upload impload a Product CSV
-* Create a mapping configuration (read Mapping configuration specifications first)
-* Try to perform a mapping et see the result
+* Add `brands`_, `colors`_ and `categories`_ objects
+* `Upload a Product CSV`_
+* `Create a mapping configuration`_ (read Mapping configuration specifications first)
+* Try to `perform a mapping and see the result`_
 
 Mapping configuration specifications
 ------------------------------------
@@ -67,9 +65,17 @@ The Mapping configuration is a JSON like:
         }, 
     ]
 
-**external_name**: the CSV column
-**model_name**: the Product field corresponding to the CV column 
-**foreign_key_mapping**: a list of foreign key mapping
-    **external_fk**: a CSV value
-    **internal_value**: the internal value (or primary key)
-    **pattern (optional)**: the subobject field where the value should be sought  
+- **external_name**: the CSV column
+- **model_name**: the Product field corresponding to the CV column 
+- **foreign_key_mapping**: a list of foreign key mapping
+
+  - **external_fk**: a CSV value
+  - **internal_value**: the internal value (or primary key)
+  - **pattern (optional)**: the subobject field where the value should be sought  
+
+.. _perform a mapping and see the result: http://localhost:8000/
+.. _Create a mapping configuration: http://localhost:8000/admin/mapper/mappingconfig/ 
+.. _Upload a Product CSV: http://localhost:8000/admin/mapper/importedproductcsv/add/ 
+.. _brands: http://localhost:8000/admin/mapper/brand/ 
+.. _colors: http://localhost:8000/admin/mapper/color/ 
+.. _categories: http://localhost:8000/admin/mapper/category/ 
