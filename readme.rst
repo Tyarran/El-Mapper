@@ -35,4 +35,4 @@ Run application
 
     python manage.py runserver
 
-Go to `http://localhost:8000/`_
+Go to http://localhost:8000/
