@@ -36,3 +36,40 @@ Run application
     python manage.py runserver
 
 Go to http://localhost:8000/
+
+Usage
+-----
+
+* The database must be filled with the DJango Administration site: http://localhost:8000.
+* Add brands, colors and categories objects
+* Upload impload a Product CSV
+* Create a mapping configuration (read Mapping configuration specifications first)
+* Try to perform a mapping et see the result
+
+Mapping configuration specifications
+------------------------------------
+
+The Mapping configuration is a JSON like:
+
+.. code-block:: json
+
+    [
+        {
+            "foreign_key_mapping": [
+                {
+                    "pattern": "pk", 
+                    "external_fk": "3", 
+                    "internal_value": "1"
+                }
+            ], 
+            "external_name": "category", 
+            "model_name": "category"
+        }, 
+    ]
+
+**external_name**: the CSV column
+**model_name**: the Product field corresponding to the CV column 
+**foreign_key_mapping**: a list of foreign key mapping
+    **external_fk**: a CSV value
+    **internal_value**: the internal value (or primary key)
+    **pattern (optional)**: the subobject field where the value should be sought  

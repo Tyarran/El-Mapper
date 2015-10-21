@@ -1,0 +1,50 @@
+[
+    {
+        "foreign_key_mapping": [
+            {
+                "pattern": "pk", 
+                "external_fk": "3", 
+                "internal_value": "1"
+            }
+        ], 
+        "external_name": "category", 
+        "model_name": "category"
+    }, 
+    {
+        "foreign_key_mapping": [
+            {
+                "pattern": "pk", 
+                "external_fk": "value", 
+                "internal_value": "test"
+            }
+        ], 
+        "external_name": "brand", 
+        "model_name": "brand"
+    }, 
+    {
+        "foreign_key_mapping": [], 
+        "external_name": "price", 
+        "model_name": "price"
+    }, 
+    {
+        "foreign_key_mapping": [], 
+        "external_name": "description", 
+        "model_name": "description"
+    }, 
+    {
+        "foreign_key_mapping": [
+            {
+                "pattern": "pk", 
+                "external_fk": "value", 
+                "internal_value": "test"
+            }
+        ], 
+        "external_name": "color", 
+        "model_name": "color"
+    }, 
+    {
+        "foreign_key_mapping": [], 
+        "external_name": "name", 
+        "model_name": "name"
+    }
+]
