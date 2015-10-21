@@ -44,7 +44,7 @@ class MappingResultView(FormMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(MappingResultView, self).get_context_data(**kwargs)
         columns = self.parse_csv()
-        context['errors'] = Mapper(self.imported_csv)()
+        context['result'] = Mapper(self.imported_csv)()
         context["fields"] = [(column, Product.fieldnames()) for column in columns]
         default_json = {field: '' for field in columns}
         context['mapping_form'] = MappingForm(data={'json': json.dumps(default_json, indent=4)})
@@ -99,6 +99,7 @@ class Mapper(object):
             'total': index,
             'imported': index - len(self.errors),
             'errors': self.errors,
+            'errors_nb': len(self.errors),
         }
 
     def get_value(self, field, value, config):

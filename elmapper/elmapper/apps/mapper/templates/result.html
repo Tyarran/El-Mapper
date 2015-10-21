@@ -6,7 +6,22 @@
     </head>
     <body>
         <div id="content">
-            <h1>Errors</h1>
+            <h1>Mapping result</h1>
+            <h2>Summary</h2>
+            <table>
+                <tr>
+                    <td>total</td>
+                    <td>{{ result.total }}</td>
+                </tr>
+                <tr>
+                    <td>imported</td>
+                    <td>{{ result.imported }}</td>
+                </tr>
+                <tr>
+                    <td>errors</td>
+                    <td>{{ result.errors_nb }}</td>
+                </tr>
+            </table>
             <table>
                 {% for line, errors in errors %}
                 <tr>
@@ -15,31 +30,28 @@
                 </tr>
                 {% endfor%}
             </table>
-            <ul>
-            </ul>
-            <h1>Unmatched field</h1>
-            <ul>
-                <li>name</li>
-                <li>category</li>
-            </ul>
-            <h1>Unmatched id</h1>
-            <ul>
-                <li> category: 1</li>
-                <li> category: 14</li>
-                <li> Brand: 41</li>
-            </ul>
 
-            <h1>Retry</h1>
-            <p>Try with another mapping configuration:</p>
-            <ul>
-                {% for mapping in existing_mapping %}
-                <li>{{ mapping }}</li>
-                {% endfor%}
-            </ul>
-
-            <h1>Create new mapping</h1>
-            <p>Create new mapping configuration</p>
-            {{ mapping_form }}
+            {% if result.errors_nb > 0 %}
+            <h2>Errors details</h2>  
+            <table>
+                {% for error in result.errors %}
+                <thead>
+                    <th>Line</th>
+                    <th>Data</th>
+                    <th>Error description</th>
+                </thead>
+                <tr>
+                    <td>{{ error.0.0 }}</td>
+                    <td>{{ error.0.1 }}</td>
+                    <td>
+                        {% for error_txt in error.1 %}
+                        <p>{{ error_txt }}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
         </div>
     </body>
 </html>
