@@ -1,56 +1,49 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        <title></title>
-    </head>
-    <body>
-        <div id="content">
-            <h1>Mapping result</h1>
-            <h2>Summary</h2>
-            <table>
-                <tr>
-                    <td>{{ result.total }}</td>
-                </tr>
-                <tr>
-                    <td>imported</td>
-                    <td>{{ result.imported }}</td>
-                </tr>
-                <tr>
-                    <td>errors</td>
-                    <td>{{ result.errors_nb }}</td>
-                </tr>
-            </table>
-            <table>
-                {% for line, errors in errors %}
-                <tr>
-                    <td>{{ line }}</td>
-                    <td>{{ errors }}</td>
-                </tr>
-                {% endfor%}
-            </table>
+{% extends 'base.html' %}
+{% block "content" %}
+<h1>Mapping result</h1>
+<h2>Summary</h2>
+<table class="table table-striped">
+    <tr>
+        <td>Total</td>
+        <td>{{ result.total }}</td>
+    </tr>
+    <tr>
+        <td>imported</td>
+        <td>{{ result.imported }}</td>
+    </tr>
+    <tr>
+        <td>errors</td>
+        <td>{{ result.errors_nb }}</td>
+    </tr>
+</table>
+<table>
+    {% for line, errors in errors %}
+    <tr>
+        <td>{{ line }}</td>
+        <td>{{ errors }}</td>
+    </tr>
+    {% endfor%}
+</table>
 
-            {% if result.errors_nb > 0 %}
-            <h2>Errors details</h2>  
-            <table>
-                {% for error in result.errors %}
-                <thead>
-                    <th>Line</th>
-                    <th>Data</th>
-                    <th>Error description</th>
-                </thead>
-                <tr>
-                    <td>{{ error.0.0 }}</td>
-                    <td>{{ error.0.1 }}</td>
-                    <td>
-                        {% for error_txt in error.1 %}
-                        <p>{{ error_txt }}</p>
-                        {% endfor %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-            {% endif %}
-        </div>
-    </body>
-</html>
+{% if result.errors_nb > 0 %}
+<h2>Errors details</h2>  
+<table class="table table-striped">
+    {% for error in result.errors %}
+    <thead>
+        <th>Line</th>
+        <th>Data</th>
+        <th>Error description</th>
+    </thead>
+    <tr>
+        <td>{{ error.0.0 }}</td>
+        <td>{{ error.0.1 }}</td>
+        <td>
+            {% for error_txt in error.1 %}
+            <p>{{ error_txt }}</p>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

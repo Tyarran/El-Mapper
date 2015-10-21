@@ -1,6 +1,18 @@
-<h1>Mapping Results</h1>
-<ul>
+{% extends "base.html" %}
+{% block "content" %}
+<h1>New mapping</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Process">
+</form>
+
+<h1>Mapping Result History</h1>
+<table class="table table-striped">
     {% for result, url in url_object %}
-    <li><a href="{{ url }}">{{ result }}</a></li>
+    <tr><td><a href="{{ url }}">{{ result }}</a></td></tr>
     {% endfor %}
+</table>
+<ul>
 </ul>
+{% endblock %}

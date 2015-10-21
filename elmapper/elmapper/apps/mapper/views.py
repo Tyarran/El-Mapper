@@ -8,15 +8,22 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
-from django.views.generic.list import ListView
 
 from elmapper.apps.mapper.forms import MappingForm, ProductForm
 from elmapper.apps.mapper.models import Product, MappingResult
 
 
-class MappingView(FormView):
-    template_name = 'mapper/mapping.html'
+class ResultListView(FormView):
+    model = MappingResult
     form_class = MappingForm
+    template_name = 'mapper/mappingresult_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ResultListView, self).get_context_data(**kwargs)
+        context['url_object'] = [(obj, reverse('result-detail', args=((obj.pk, ))))
+                                 for obj in self.model.objects.all()]
+        context['form'] = self.form_class()
+        return context
 
     def form_valid(self, form):
         csv, config = form.cleaned_data['csv'], form.cleaned_data['config']
@@ -26,15 +33,6 @@ class MappingView(FormView):
                                        result=json.dumps(result))
         mapping_result.save()
         return HttpResponseRedirect(reverse('result-detail', args=((mapping_result.pk, ))))
-
-
-class ResultListView(ListView):
-    model = MappingResult
-
-    def get_context_data(self, **kwargs):
-        context = super(ResultListView, self).get_context_data(**kwargs)
-        context['url_object'] = [(obj, reverse('result-detail', args=((obj.pk, )))) for obj in context['object_list']]
-        return context
 
 
 class ResultDetailView(DetailView):
