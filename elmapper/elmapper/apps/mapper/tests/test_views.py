@@ -27,14 +27,17 @@ class MapperTestCase(TestCase):
             'model_name': 'name',
             'foreign_key_mapping': [],
         }])
-        self.imported_csv = ImportedProductCSV(csv_file=CSV_PATH, mapping_config=mapping_config)
+        self.imported_csv = ImportedProductCSV(csv_file=CSV_PATH)
         self.color = Color.objects.create(name='red')
         self.brand = Brand.objects.create(name='RCommande Corp', description="my fictive company")
         self.category = Category.objects.create(label='test', description="a test category")
 
     def test_get_value_no_fk(self):
         from elmapper.apps.mapper.views import Mapper
-        mapper = Mapper(self.imported_csv)
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = '{}'
+        mapper = Mapper(self.imported_csv, mapping_config)
         config = {
             'external_name': 'name',
             'model_name': 'name',
@@ -47,7 +50,9 @@ class MapperTestCase(TestCase):
 
     def test_get_value_with_fk_with_pattern(self):
         from elmapper.apps.mapper.views import Mapper
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'category',
             'model_name': 'category',
             'foreign_key_mapping': [{
@@ -57,7 +62,7 @@ class MapperTestCase(TestCase):
             }],
         }])
 
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
         config = {
             'external_name': 'category',
             'model_name': 'category',
@@ -74,7 +79,9 @@ class MapperTestCase(TestCase):
 
     def test_get_value_with_fk_with_attribute_pattern(self):
         from elmapper.apps.mapper.views import Mapper
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'category',
             'model_name': 'category',
             'foreign_key_mapping': [{
@@ -83,7 +90,7 @@ class MapperTestCase(TestCase):
                 'pattern': 'label',
             }],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
         config = {
             'external_name': 'category',
             'model_name': 'category',
@@ -100,7 +107,9 @@ class MapperTestCase(TestCase):
 
     def test_get_mapping_config_by_external_name(self):
         from elmapper.apps.mapper.views import Mapper
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'category',
             'model_name': 'category',
             'foreign_key_mapping': [{
@@ -109,7 +118,7 @@ class MapperTestCase(TestCase):
                 'pattern': 'label',
             }],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
 
         result = mapper.get_mapping_config_by_external_name('category')
 
@@ -117,7 +126,9 @@ class MapperTestCase(TestCase):
 
     def test_get_mapping_config_by_external_name_with_multiple_field_mapping(self):
         from elmapper.apps.mapper.views import Mapper
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'category',
             'model_name': 'category',
             'foreign_key_mapping': [{
@@ -134,7 +145,7 @@ class MapperTestCase(TestCase):
                 'pattern': 'pk',
             }],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
 
         result = mapper.get_mapping_config_by_external_name('brand')
 
@@ -142,7 +153,9 @@ class MapperTestCase(TestCase):
 
     def test__call__(self):
         from elmapper.apps.mapper.views import Mapper, Product
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'category',
             'model_name': 'category',
             'foreign_key_mapping': [{
@@ -179,7 +192,7 @@ class MapperTestCase(TestCase):
             'model_name': 'name',
             'foreign_key_mapping': [],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
 
         result = mapper()
 
@@ -190,7 +203,9 @@ class MapperTestCase(TestCase):
 
     def test__call__with_missing_column_mapping(self):
         from elmapper.apps.mapper.views import Mapper, Product
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'brand',
             'model_name': 'brand',
             'foreign_key_mapping': [{
@@ -219,7 +234,7 @@ class MapperTestCase(TestCase):
             'model_name': 'name',
             'foreign_key_mapping': [],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
 
         result = mapper()
 
@@ -230,7 +245,9 @@ class MapperTestCase(TestCase):
 
     def test__call__with_unknown_category_mapping(self):
         from elmapper.apps.mapper.views import Mapper, Product
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'brand',
             'model_name': 'brand',
             'foreign_key_mapping': [{
@@ -259,7 +276,7 @@ class MapperTestCase(TestCase):
             'model_name': 'name',
             'foreign_key_mapping': [],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
 
         result = mapper()
 
@@ -270,7 +287,9 @@ class MapperTestCase(TestCase):
 
     def test__call__with_unknow_reference(self):
         from elmapper.apps.mapper.views import Mapper, Product
-        self.imported_csv.mapping_config.json = json.dumps([{
+        from elmapper.apps.mapper.models import MappingConfig
+        mapping_config = MappingConfig()
+        mapping_config.json = json.dumps([{
             'external_name': 'category',
             'model_name': 'category',
             'foreign_key_mapping': [{
@@ -307,7 +326,7 @@ class MapperTestCase(TestCase):
             'model_name': 'name',
             'foreign_key_mapping': [],
         }])
-        mapper = Mapper(self.imported_csv)
+        mapper = Mapper(self.imported_csv, mapping_config)
 
         result = mapper()
 
