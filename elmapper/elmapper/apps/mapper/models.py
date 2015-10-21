@@ -90,4 +90,16 @@ class ImportedProductCSV(models.Model):
     """Given product CSV File"""
     csv_file = models.FileField()
     upload_date = models.DateTimeField(auto_now_add=True)
-    mapping_config = models.ForeignKey(MappingConfig, null=True, blank=True)
+
+
+class MappingResult(models.Model):
+    """Mapping result"""
+    csv = models.ForeignKey(ImportedProductCSV)
+    config = models.ForeignKey(MappingConfig)
+    date = models.DateTimeField(auto_now_add=True)
+    result = models.TextField()
+
+    def __str__(self):
+        return '{} - {} at {}'.format(self.csv.csv_file.name, self.config.title, self.date)
+
+    __unicode__ = __str__

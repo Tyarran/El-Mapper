@@ -3,60 +3,54 @@ import csv
 import itertools
 import json
 
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseNotFound
-from django.views.generic.base import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic.edit import FormView, FormMixin
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 
-from elmapper.apps.mapper.forms import ImportedProductCSVForm, MappingForm, ProductForm
-from elmapper.apps.mapper.models import ImportedProductCSV, Product, MappingConfig
-
-
-class ImportCSVView(FormView):
-    """CSV import view"""
-    template_name = 'import_csv.html'
-    form_class = ImportedProductCSVForm
-
-    def form_valid(self, form):
-        obj = form.save()
-        return HttpResponseRedirect(reverse('mapping_result', args=((obj.pk, ))))
+from elmapper.apps.mapper.forms import MappingForm, ProductForm
+from elmapper.apps.mapper.models import Product, MappingResult
 
 
-class MappingResultView(FormMixin, TemplateView):
-    """Mapping result view"""
-    template_name = "result.html"
+class MappingView(FormView):
+    template_name = 'mapper/mapping.html'
     form_class = MappingForm
 
-    def parse_csv(self):
-        csv_file = self.imported_csv.csv_file.file
-        reader = csv.reader(csv_file)
-        return reader.next()
+    def form_valid(self, form):
+        csv, config = form.cleaned_data['csv'], form.cleaned_data['config']
+        result = Mapper(csv, config)()
+        mapping_result = MappingResult(csv=csv,
+                                       config=config,
+                                       result=json.dumps(result))
+        mapping_result.save()
+        return HttpResponseRedirect(reverse('result-detail', args=((mapping_result.pk, ))))
 
-    def get(self, request, pk):
-        self.pk = pk
-        try:
-            self.imported_csv = ImportedProductCSV.objects.get(pk=self.pk)
-        except ObjectDoesNotExist:
-            return HttpResponseNotFound()
-        return super(MappingResultView, self).get(request)
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(MappingResultView, self).get_context_data(**kwargs)
-        columns = self.parse_csv()
-        context['result'] = Mapper(self.imported_csv)()
-        context["fields"] = [(column, Product.fieldnames()) for column in columns]
-        default_json = {field: '' for field in columns}
-        context['mapping_form'] = MappingForm(data={'json': json.dumps(default_json, indent=4)})
-        context['existing_mapping'] = MappingConfig.objects.all()
+class ResultListView(ListView):
+    model = MappingResult
+
+    def get_context_data(self, **kwargs):
+        context = super(ResultListView, self).get_context_data(**kwargs)
+        context['url_object'] = [(obj, reverse('result-detail', args=((obj.pk, )))) for obj in context['object_list']]
+        return context
+
+
+class ResultDetailView(DetailView):
+    model = MappingResult
+
+    def get_context_data(self, **kwargs):
+        context = super(ResultDetailView, self).get_context_data(**kwargs)
+        context['result'] = json.loads(context['object'].result)
         return context
 
 
 class Mapper(object):
 
-    def __init__(self, imported_csv):
+    def __init__(self, imported_csv, mapping_config):
         self.imported_csv = imported_csv
-        self.mapping_config = json.loads(imported_csv.mapping_config.json)
+        self.mapping_config = json.loads(mapping_config.json)
         self.csv_file = self.imported_csv.csv_file.file
         self.errors = []
 
