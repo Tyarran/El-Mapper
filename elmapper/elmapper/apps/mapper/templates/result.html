@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title></title>
+    </head>
+    <body>
+        <div id="content">
+            <h1>Errors</h1>
+            <table>
+                {% for line, errors in errors %}
+                <tr>
+                    <td>{{ line }}</td>
+                    <td>{{ errors }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            <ul>
+            </ul>
+            <h1>Unmatched field</h1>
+            <ul>
+                <li>name</li>
+                <li>category</li>
+            </ul>
+            <h1>Unmatched id</h1>
+            <ul>
+                <li> category: 1</li>
+                <li> category: 14</li>
+                <li> Brand: 41</li>
+            </ul>
+
+            <h1>Retry</h1>
+            <p>Try with another mapping configuration:</p>
+            <ul>
+                {% for mapping in existing_mapping %}
+                <li>{{ mapping }}</li>
+                {% endfor%}
+            </ul>
+
+            <h1>Create new mapping</h1>
+            <p>Create new mapping configuration</p>
+            {{ mapping_form }}
+        </div>
+    </body>
+</html>

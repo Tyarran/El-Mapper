@@ -2,6 +2,7 @@
 import logging
 
 from django.db import models
+from django.db.models.fields.related import ForeignKey
 
 
 logger = logging.getLogger(__name__)
@@ -59,6 +60,17 @@ class Product(models.Model):
         """Return the list of field names without id/pk field"""
         return [field.name for field in cls._meta.fields if field.name not in ('id', 'pk')]
 
+    @classmethod
+    def related_model(cls, fieldname):
+        """Return the related model for given fieldname
+        Return None if the fieldname is not instance of models.ForeignKey
+        """
+        field = [field for field in cls._meta.fields if field.name == fieldname]
+        result = None
+        if len(field) != 0 and isinstance(field[0], ForeignKey):
+            result = field[0].related_model
+        return result
+
     __unicode__ = __str__
 
 
@@ -67,6 +79,11 @@ class MappingConfig(models.Model):
     json = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=256)
     description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+    __unicode__ = __str__
 
 
 class ImportedProductCSV(models.Model):

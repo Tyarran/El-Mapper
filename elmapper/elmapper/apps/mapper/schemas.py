@@ -4,7 +4,8 @@ import colander
 class FKMapping(colander.MappingSchema):
     """A Foreign key Mapping between a external and internal id"""
     external_fk = colander.SchemaNode(colander.String())
-    internal_fk = colander.SchemaNode(colander.String())
+    internal_value = colander.SchemaNode(colander.String())
+    pattern = colander.SchemaNode(colander.String(), missing='pk')
 
 
 class FKMappings(colander.SequenceSchema):
