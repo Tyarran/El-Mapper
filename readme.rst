@@ -24,3 +24,15 @@ from sources
     pip install -r requirements.ext
     # In develop installation
     pip install -r requirements-develop.txt
+    cd elmapper
+    python manage.py migrate
+    python manage.py createsuperuser
+
+Run application
+---------------
+
+.. code-block:: bash
+
+    python manage.py runserver
+
+Go to `http://localhost:8000/`_
